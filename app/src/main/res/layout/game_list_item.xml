@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--  Single List Item Design -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/game_list_item"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="10dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_weight="0.16"
+            android:layout_width="0dp"
+            android:text="@string/game_list_item_date"/>
+        <TextView
+            android:id="@+id/game_list_item_date"
+            android:layout_weight="0.16"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_weight="0.16"
+            android:layout_width="0dp"
+            android:text="@string/game_list_item_elo"/>
+        <TextView
+            android:id="@+id/game_list_item_elo"
+            android:layout_weight="0.16"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_weight="0.16"
+            android:layout_width="0dp"
+            android:text="@string/game_list_item_result"/>
+        <TextView
+            android:id="@+id/game_list_item_result"
+            android:layout_weight="0.16"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_height="wrap_content"
+            android:layout_weight="0.16"
+            android:layout_width="0dp"
+            android:text="@string/game_list_item_note"/>
+        <TextView
+            android:id="@+id/game_list_item_note"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+</LinearLayout>
