@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">Football Stats</string>
+    <string name="action_settings">Settings</string>
+    <string name="main_add_player_button">Add</string>
+    <string name="main_add_player_exists">already exists!</string>
+    <string name="main_add_player_empty">Enter name!</string>
+    <string name="player_stats_add_game_button">Add Game</string>
+    <string name="player_stats_title_activity">Stats</string>
+    <string name="add_game_title_activity">Add game</string>
+    <string name="add_game_radio_won">Won</string>
+    <string name="add_game_radio_drawn">Drawn</string>
+    <string name="add_game_radio_lost">Lost</string>
+    <string name="add_game_result">You</string>
+    <string name="add_game_result_error">Select game result!</string>
+    <string name="add_game_result_2">Won</string>
+    <string name="add_game_result_1">Drawn</string>
+    <string name="add_game_result_0">Lost</string>
+    <string name="add_game_note">Note</string>
+    <string name="add_game_elo">ELO</string>
+    <string name="add_game_elo_error_empty">Fill opponent\'s ELO!</string>
+    <string name="add_game_elo_error_not_number">ELO has to be a number!</string>
+    <string name="add_game_submit_button">Submit game</string>
+    <string name="game_list_item_opponent">Opponent</string>
+    <string name="game_list_item_date">Date</string>
+    <string name="game_list_item_elo">"ELO: "</string>
+    <string name="game_list_item_result">"Result: "</string>
+    <string name="game_list_item_note">"Note: "</string>
+</resources>
