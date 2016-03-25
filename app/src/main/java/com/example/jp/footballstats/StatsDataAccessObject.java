@@ -81,8 +81,7 @@ class StatsDataAccessObject {
         gameArrayList.clear();
 
         this.openReadOnlyDB();
-        //Todo search order by date
-        Cursor cursor = database.rawQuery("select * from games where playerid like ? limit ?", new String[]{String.valueOf(playerID) + "%", SEARCH_LIMIT});
+        Cursor cursor = database.rawQuery("select * from games where playerid = ? order by date desc limit ?", new String[]{String.valueOf(playerID), SEARCH_LIMIT});
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
