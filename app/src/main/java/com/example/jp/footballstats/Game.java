@@ -2,7 +2,6 @@ package com.example.jp.footballstats;
 
 class Game {
 
-    //todo add formatted date
     private long     playerID;
     private String   date;
     private int      result;
