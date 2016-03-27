@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.text.DateFormat;
@@ -53,6 +54,8 @@ class GameListAdapter extends BaseAdapter{
             mViewHolder.gameListItemElo = (TextView) convertView.findViewById(R.id.game_list_item_elo);
             mViewHolder.gameListItemResult = (TextView) convertView.findViewById(R.id.game_list_item_result);
             mViewHolder.gameListItemNote = (TextView) convertView.findViewById(R.id.game_list_item_note);
+            mViewHolder.gameListNoteLayout = (LinearLayout) convertView.findViewById(R.id.game_list_note_layout);
+
             convertView.setTag(mViewHolder);
         } else {
             mViewHolder = (MyViewHolder) convertView.getTag();
@@ -68,8 +71,13 @@ class GameListAdapter extends BaseAdapter{
         //todo change result to verbal type
         mViewHolder.gameListItemResult.setText(String.valueOf(game.getResult()));
 
-        //todo hide note if empty
-        mViewHolder.gameListItemNote.setText(game.getNote());
+        String note = game.getNote();
+        if (note.isEmpty()){
+            mViewHolder.gameListNoteLayout.setVisibility(View.GONE);
+        }else {
+            mViewHolder.gameListNoteLayout.setVisibility(View.VISIBLE);
+            mViewHolder.gameListItemNote.setText(game.getNote());
+        }
 
         return convertView;
     }
@@ -94,6 +102,7 @@ class GameListAdapter extends BaseAdapter{
         TextView gameListItemDate;
         TextView gameListItemElo;
         TextView gameListItemResult;
+        LinearLayout gameListNoteLayout;
         TextView gameListItemNote;
     }
 }
