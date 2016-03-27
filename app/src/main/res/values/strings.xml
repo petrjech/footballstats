@@ -24,6 +24,9 @@
     <string name="game_list_item_opponent">Opponent</string>
     <string name="game_list_item_date">Date</string>
     <string name="game_list_item_elo">"ELO: "</string>
-    <string name="game_list_item_result">"Result: "</string>
+    <string name="game_list_item_result">"You: "</string>
     <string name="game_list_item_note">"Note: "</string>
+    <string name="game_list_item_result_won">Won</string>
+    <string name="game_list_item_result_drawn">Drawn</string>
+    <string name="game_list_item_result_lost">Lost</string>
 </resources>

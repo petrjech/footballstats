@@ -1,7 +1,6 @@
 package com.example.jp.footballstats;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,13 +48,7 @@ class GameListAdapter extends BaseAdapter{
 
         if (convertView == null) {
             convertView = mInflater.inflate(R.layout.game_list_item, parent, false);
-            mViewHolder = new MyViewHolder();
-            mViewHolder.gameListItemDate = (TextView) convertView.findViewById(R.id.game_list_item_date);
-            mViewHolder.gameListItemElo = (TextView) convertView.findViewById(R.id.game_list_item_elo);
-            mViewHolder.gameListItemResult = (TextView) convertView.findViewById(R.id.game_list_item_result);
-            mViewHolder.gameListItemNote = (TextView) convertView.findViewById(R.id.game_list_item_note);
-            mViewHolder.gameListNoteLayout = (LinearLayout) convertView.findViewById(R.id.game_list_note_layout);
-
+            mViewHolder = new MyViewHolder(convertView, context);
             convertView.setTag(mViewHolder);
         } else {
             mViewHolder = (MyViewHolder) convertView.getTag();
@@ -63,39 +56,12 @@ class GameListAdapter extends BaseAdapter{
 
         final Game game = (Game)getItem(position);
 
-        String date = formatDate(game);
-        mViewHolder.gameListItemDate.setText(date);
-
-        mViewHolder.gameListItemElo.setText(String.valueOf(game.getElo()));
-
-        //todo change result to verbal type
-        mViewHolder.gameListItemResult.setText(String.valueOf(game.getResult()));
-
-        String note = game.getNote();
-        if (note.isEmpty()){
-            mViewHolder.gameListNoteLayout.setVisibility(View.GONE);
-        }else {
-            mViewHolder.gameListNoteLayout.setVisibility(View.VISIBLE);
-            mViewHolder.gameListItemNote.setText(game.getNote());
-        }
+        mViewHolder.setDate(game.getDate());
+        mViewHolder.setElo(game.getElo());
+        mViewHolder.setResult(game.getResult());
+        mViewHolder.setNote(game.getNote());
 
         return convertView;
-    }
-
-    @NonNull
-    private String formatDate(Game game) {
-        String dateString;
-        DateFormat dateFormatIn  = new SimpleDateFormat(StatsDataAccessObject.DATE_FORMAT, Locale.US);
-        DateFormat dateFormatOut = new SimpleDateFormat(MainActivity.displayDateFormat, Locale.US);
-        try {
-            String gameDate = game.getDate();
-            if (gameDate == null) throw (new ParseException("", 0));
-            Date date = dateFormatIn.parse(gameDate);
-            dateString = dateFormatOut.format(date);
-        } catch (ParseException e) {
-            dateString = context.getString(R.string.game_list_date_error);
-        }
-        return dateString;
     }
 
     private static class MyViewHolder {
@@ -104,6 +70,61 @@ class GameListAdapter extends BaseAdapter{
         TextView gameListItemResult;
         LinearLayout gameListNoteLayout;
         TextView gameListItemNote;
+        Context context;
+
+        MyViewHolder(View convertView, Context context){
+            this.gameListItemDate = (TextView) convertView.findViewById(R.id.game_list_item_date);
+            this.gameListItemElo = (TextView) convertView.findViewById(R.id.game_list_item_elo);
+            this.gameListItemResult = (TextView) convertView.findViewById(R.id.game_list_item_result);
+            this.gameListItemNote = (TextView) convertView.findViewById(R.id.game_list_item_note);
+            this.gameListNoteLayout = (LinearLayout) convertView.findViewById(R.id.game_list_note_layout);
+            this.context = context;
+        }
+
+        void setDate(String gameDate){
+            String dateString;
+            DateFormat dateFormatIn  = new SimpleDateFormat(StatsDataAccessObject.DATE_FORMAT, Locale.US);
+            DateFormat dateFormatOut = new SimpleDateFormat(MainActivity.displayDateFormat, Locale.US);
+            try {
+                if (gameDate == null) throw (new ParseException("", 0));
+                Date date = dateFormatIn.parse(gameDate);
+                dateString = dateFormatOut.format(date);
+            } catch (ParseException e) {
+                dateString = context.getString(R.string.game_list_date_error);
+            }
+            this.gameListItemDate.setText(dateString);
+        }
+
+        void setResult(int result) {
+            String resultText;
+            switch(result) {
+                case 2:
+                    resultText = context.getString(R.string.game_list_item_result_won);
+                    break;
+                case 1:
+                    resultText = context.getString(R.string.game_list_item_result_drawn);
+                    break;
+                case 0:
+                    resultText = context.getString(R.string.game_list_item_result_lost);
+                    break;
+                default:
+                    resultText = "";
+            }
+            this.gameListItemResult.setText(resultText);
+        }
+
+        void setNote(String note){
+            if (note.isEmpty()){
+                this.gameListNoteLayout.setVisibility(View.GONE);
+            }else {
+                this.gameListNoteLayout.setVisibility(View.VISIBLE);
+                this.gameListItemNote.setText(note);
+            }
+        }
+
+        void setElo(int elo){
+            this.gameListItemElo.setText(String.valueOf(elo));
+        }
     }
 }
 
