@@ -61,9 +61,7 @@ public class AddGameActivity extends AppCompatActivity {
 
     public void submitGame(View view){
 
-        boolean isGameSet = this.setGame();
-
-        if (!isGameSet) return;
+        if (! setGame()) return;
 
         StatsDataAccessObject statsDAO;
         statsDAO = StatsDataAccessObject.getInstance(getApplicationContext());
@@ -74,8 +72,20 @@ public class AddGameActivity extends AppCompatActivity {
         finish();
     }
 
-    //todo split to more methods
     private boolean setGame() {
+        
+        if (! setGameResult()) return false;
+
+        if (! setGameElo()) return false;
+
+        setGameDate();
+
+        setGameNote();
+
+        return true;
+    }
+
+    private boolean setGameResult() {
         int checkedRadioButton = ((RadioGroup)findViewById(R.id.add_game_result_group)).getCheckedRadioButtonId();
         if (checkedRadioButton < 0) {
             Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.add_game_result_error), Toast.LENGTH_SHORT);
@@ -93,6 +103,10 @@ public class AddGameActivity extends AppCompatActivity {
                 game.setResult(0);
                 break;
         }
+        return true;
+    }
+
+    private boolean setGameElo() {
         String eloString = ((EditText) findViewById(R.id.add_game_edit_elo)).getText().toString();
         if (eloString.isEmpty()) {
             Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.add_game_elo_error_empty), Toast.LENGTH_SHORT);
@@ -108,17 +122,20 @@ public class AddGameActivity extends AppCompatActivity {
             return false;
         }
         game.setElo(elo);
+        return true;
+    }
 
-        @SuppressLint("SimpleDateFormat")    //Due to date sortable sqlite db field
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+    private void setGameDate() {
+        @SuppressLint("SimpleDateFormat")                                //sortable sqlite db field
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String date = sdf.format(Calendar.getInstance().getTime());
         game.setDate(date);
+    }
 
+    private void setGameNote() {
         String note = ((EditText) findViewById(R.id.add_game_edit_note)).getText().toString();
         if (!note.isEmpty()) {
             game.setNote(note);
         }
-
-        return true;
     }
 }
