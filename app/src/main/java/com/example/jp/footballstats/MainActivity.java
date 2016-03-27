@@ -20,6 +20,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final static int OPEN_PLAYER_REQUEST = 0;
+
     private ArrayList<Player> searchPlayerResults = new ArrayList<>();
     private PlayerListAdapter playerListAdapter;
     private String searchPlayerCache = "";
@@ -101,7 +103,17 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(getBaseContext(), PlayerStatsActivity.class);
         intent.putExtra("id", player.getId());
         intent.putExtra("playerName", player.getName());
-        startActivity(intent);
+        startActivityForResult(intent, OPEN_PLAYER_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == OPEN_PLAYER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                EditText search_input_widget = (EditText) findViewById(R.id.search_input);
+                search_input_widget.setText("");
+            }
+        }
     }
 
     private TextWatcher searchPlayerWatcher = new TextWatcher() {
@@ -132,4 +144,3 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 }
-//todo add check of result from player stats activity and erase search edit text

@@ -77,6 +77,8 @@ public class PlayerStatsActivity extends AppCompatActivity {
         if (requestCode == ADD_GAME_REQUEST) {
             if (resultCode == RESULT_OK) {
                 populateGames();
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
             }
         }
     }
