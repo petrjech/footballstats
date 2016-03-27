@@ -1,21 +1,29 @@
 package com.example.jp.footballstats;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 class GameListAdapter extends BaseAdapter{
 
     private ArrayList<Game> gameList;
     private LayoutInflater mInflater;
+    private Context context;
 
     GameListAdapter(Context context, ArrayList<Game> myList) {
         this.gameList = myList;
+        this.context = context;
         mInflater = LayoutInflater.from(context);
     }
 
@@ -51,15 +59,35 @@ class GameListAdapter extends BaseAdapter{
         }
 
         final Game game = (Game)getItem(position);
-        //todo use formatted date
-        mViewHolder.gameListItemDate.setText(game.getDate());
+
+        String date = formatDate(game);
+        mViewHolder.gameListItemDate.setText(date);
+
         mViewHolder.gameListItemElo.setText(String.valueOf(game.getElo()));
+
         //todo change result to verbal type
         mViewHolder.gameListItemResult.setText(String.valueOf(game.getResult()));
+
         //todo hide note if empty
         mViewHolder.gameListItemNote.setText(game.getNote());
 
         return convertView;
+    }
+
+    @NonNull
+    private String formatDate(Game game) {
+        String dateString;
+        DateFormat dateFormatIn  = new SimpleDateFormat(StatsDataAccessObject.DATE_FORMAT, Locale.US);
+        DateFormat dateFormatOut = new SimpleDateFormat(context.getString(R.string.default_date_format), Locale.US);
+        try {
+            String gameDate = game.getDate();
+            if (gameDate == null) throw (new ParseException("", 0));
+            Date date = dateFormatIn.parse(gameDate);
+            dateString = dateFormatOut.format(date);
+        } catch (ParseException e) {
+            dateString = context.getString(R.string.game_list_date_error);
+        }
+        return dateString;
     }
 
     private static class MyViewHolder {

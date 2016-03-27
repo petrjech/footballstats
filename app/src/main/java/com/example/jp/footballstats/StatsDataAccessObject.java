@@ -10,6 +10,8 @@ import java.util.ArrayList;
 
 class StatsDataAccessObject {
 
+    static final String DATE_FORMAT = "yyyyMMdd";
+
     private static final String SEARCH_LIMIT = "20";
 
     private static StatsDataAccessObject instance = null;

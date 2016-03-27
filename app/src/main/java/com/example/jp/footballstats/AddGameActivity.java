@@ -1,6 +1,5 @@
 package com.example.jp.footballstats;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +13,7 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 
 public class AddGameActivity extends AppCompatActivity {
 
@@ -126,8 +126,7 @@ public class AddGameActivity extends AppCompatActivity {
     }
 
     private void setGameDate() {
-        @SuppressLint("SimpleDateFormat")                                //sortable sqlite db field
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        SimpleDateFormat sdf = new SimpleDateFormat(StatsDataAccessObject.DATE_FORMAT, Locale.US);
         String date = sdf.format(Calendar.getInstance().getTime());
         game.setDate(date);
     }
