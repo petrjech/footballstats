@@ -78,7 +78,7 @@ class GameListAdapter extends BaseAdapter{
     private String formatDate(Game game) {
         String dateString;
         DateFormat dateFormatIn  = new SimpleDateFormat(StatsDataAccessObject.DATE_FORMAT, Locale.US);
-        DateFormat dateFormatOut = new SimpleDateFormat(context.getString(R.string.default_date_format), Locale.US);
+        DateFormat dateFormatOut = new SimpleDateFormat(MainActivity.displayDateFormat, Locale.US);
         try {
             String gameDate = game.getDate();
             if (gameDate == null) throw (new ParseException("", 0));

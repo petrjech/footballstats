@@ -1,6 +1,7 @@
 package com.example.jp.footballstats;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -23,12 +24,17 @@ public class MainActivity extends AppCompatActivity {
     private PlayerListAdapter playerListAdapter;
     private String searchPlayerCache = "";
 
+    static String displayDateFormat;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        SharedPreferences settings = getSharedPreferences("preferences", 0);
+        displayDateFormat = settings.getString("dateFormat", "dd.MM.yyyy");
 
         playerListAdapter = new PlayerListAdapter(this, searchPlayerResults);
 
