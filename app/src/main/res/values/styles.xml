@@ -6,7 +6,7 @@
     </style>
 
     <style name="football" parent="AppTheme" >
-        <item name="colorPrimaryDark">@color/jlklkj</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     </style>
 
 </resources>

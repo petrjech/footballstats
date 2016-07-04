@@ -2,8 +2,8 @@
 <resources>
 
     <style name="football" parent="AppTheme">
-        <item name="android:navigationBarColor">@color/kjhk</item>
-        <item name="android:statusBarColor">@color/kjhk</item>
-        <item name="colorPrimaryDark">@color/jlklkj</item>
+        <item name="android:navigationBarColor">@color/colorPrimary</item>
+        <item name="android:statusBarColor">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
     </style>
 </resources>

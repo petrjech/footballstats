@@ -65,7 +65,7 @@ class StatsDataAccessObject {
         results.clear();
 
         this.openReadOnlyDB();
-        Cursor cursor = database.rawQuery("select * from players where player like ? limit ?", new String[]{search + "%", SEARCH_LIMIT});
+        Cursor cursor = database.rawQuery("select * from players where player like ? order by player limit ?", new String[]{search + "%", SEARCH_LIMIT});
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {

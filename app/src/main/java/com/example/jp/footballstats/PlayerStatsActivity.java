@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -54,15 +55,18 @@ public class PlayerStatsActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+            case R.id.action_delete_player:
+                Toast toast = Toast.makeText(getApplicationContext(), "chces smazat hrace " + player, Toast.LENGTH_SHORT);
+                toast.show();
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
         }
-
-        //ToDo add menu support
-        return super.onOptionsItemSelected(item);
     }
 
     public void addGame(View view){
