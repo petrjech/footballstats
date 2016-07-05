@@ -1,5 +1,7 @@
 package com.example.jp.footballstats;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -60,8 +61,7 @@ public class PlayerStatsActivity extends AppCompatActivity {
                 return true;
 
             case R.id.action_delete_player:
-                Toast toast = Toast.makeText(getApplicationContext(), "chces smazat hrace " + player, Toast.LENGTH_SHORT);
-                toast.show();
+                showDialogDeletePlayer();
                 return true;
 
             default:
@@ -91,5 +91,32 @@ public class PlayerStatsActivity extends AppCompatActivity {
         StatsDataAccessObject statsDAO = StatsDataAccessObject.getInstance(this);
         statsDAO.searchGames(playerID, gameArrayList);
         gameListAdapter.notifyDataSetChanged();
+    }
+
+    private void showDialogDeletePlayer() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(PlayerStatsActivity.this);
+        builder.setTitle(R.string.dialog_delete_player_title);
+        builder.setMessage(getString(R.string.dialog_delete_player_message) + player + " ?");
+        builder.setPositiveButton(R.string.dialog_delete_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        deletePlayer();
+                        Intent intent = new Intent();
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+                });
+        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                });
+        builder.setIcon(android.R.drawable.ic_delete);
+        builder.show();
+    }
+
+    private void deletePlayer() {
+        StatsDataAccessObject statsDAO;
+        statsDAO = StatsDataAccessObject.getInstance(getApplicationContext());
+        statsDAO.deletePlayer(playerID);
     }
 }

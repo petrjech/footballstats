@@ -19,33 +19,33 @@ class StatsDataAccessObject {
     private SQLiteDatabase database;
     private FootballStatsDatabase dbHelper;
 
-    private StatsDataAccessObject(Context context){
+    private StatsDataAccessObject(Context context) {
         dbHelper = new FootballStatsDatabase(context);
     }
 
-    static StatsDataAccessObject getInstance(Context context){
-        if (instance == null){
+    static StatsDataAccessObject getInstance(Context context) {
+        if (instance == null) {
             instance = new StatsDataAccessObject(context);
         }
         return instance;
     }
 
-    static String createTablePlayers(){
+    static String createTablePlayers() {
         return "CREATE TABLE PLAYERS("
-                +  "_ID INTEGER PRIMARY KEY ASC,"
-                +  "PLAYER TEXT NOT NULL"
-                +  ");";
+                + "_ID INTEGER PRIMARY KEY ASC,"
+                + "PLAYER TEXT NOT NULL"
+                + ");";
     }
 
-    static String createTableGames(){
+    static String createTableGames() {
         return "CREATE TABLE GAMES("
-                +  "_ID INTEGER PRIMARY KEY ASC,"
-                +  "PLAYERID INTEGER NOT NULL,"
-                +  "DATE TEXT,"
-                +  "RESULT INTEGER,"
-                +  "ELO INTEGER,"
-                +  "NOTE TEXT"
-                +  ");";
+                + "_ID INTEGER PRIMARY KEY ASC,"
+                + "PLAYERID INTEGER NOT NULL,"
+                + "DATE TEXT,"
+                + "RESULT INTEGER,"
+                + "ELO INTEGER,"
+                + "NOTE TEXT"
+                + ");";
     }
 
     void openDB() throws SQLException {
@@ -65,7 +65,7 @@ class StatsDataAccessObject {
         results.clear();
 
         this.openReadOnlyDB();
-        Cursor cursor = database.rawQuery("select * from players where player like ? order by player limit ?", new String[]{search + "%", SEARCH_LIMIT});
+        Cursor cursor = database.rawQuery("select * from players where player like ? order by player collate nocase limit ?", new String[]{search + "%", SEARCH_LIMIT});
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -120,7 +120,7 @@ class StatsDataAccessObject {
         return new Player(insertId, player);
     }
 
-    boolean containsPlayer(String name){
+    boolean containsPlayer(String name) {
         this.openReadOnlyDB();
         Cursor cursor = database.rawQuery("select * from players where player like ? limit ?", new String[]{name, SEARCH_LIMIT});
         boolean result = cursor.getCount() == 1;
@@ -139,6 +139,13 @@ class StatsDataAccessObject {
 
         this.openDB();
         database.insert("games", null, values);
+        this.closeDB();
+    }
+
+    void deletePlayer(long playerID) {
+        this.openDB();
+        database.delete("games", "playerid = ?", new String[]{"" + playerID});
+        database.delete("players", "_id = ?", new String[]{"" + playerID});
         this.closeDB();
     }
 }
