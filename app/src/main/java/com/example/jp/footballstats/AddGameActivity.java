@@ -61,7 +61,7 @@ public class AddGameActivity extends AppCompatActivity {
         }
 
         game.setPlayerID(intent.getLongExtra("id", 0));
-        String playerName = intent.getStringExtra("player");
+        String playerName = intent.getStringExtra("playerName");
 
         setTitle(playerName + "  " + getString(R.string.add_game_title_activity));
     }
