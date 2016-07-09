@@ -101,7 +101,8 @@ class StatsDataAccessObject {
     }
 
     private Game cursorToGame(Cursor cursor) {
-        Game game = new Game(cursor.getLong(1));
+        Game game = new Game(cursor.getLong(0));
+        game.setPlayerID(cursor.getLong(1));
         game.setDate(cursor.getString(2));
         game.setResult(cursor.getInt(3));
         game.setElo(cursor.getInt(4));
@@ -146,6 +147,12 @@ class StatsDataAccessObject {
         this.openDB();
         database.delete("games", "playerid = ?", new String[]{"" + playerID});
         database.delete("players", "_id = ?", new String[]{"" + playerID});
+        this.closeDB();
+    }
+
+    void deleteGame(Game game) {
+        this.openDB();
+        database.delete("games", "rowid = ?", new String[]{"" + game.getGameID()});
         this.closeDB();
     }
 }

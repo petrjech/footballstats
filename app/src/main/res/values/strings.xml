@@ -5,6 +5,10 @@
     <string name="dialog_delete_player_title">Delete Player</string>
     <string name="dialog_delete_player_message">"Are you sure you want to delete the player: "</string>
     <string name="dialog_delete_ok">"Delete"</string>
+    <string name="dialog_game_title">"Game options"</string>
+    <string name="dialog_game_message">"Do you want to edit/delete this game?"</string>
+    <string name="dialog_game_delete">"Delete"</string>
+    <string name="dialog_game_edit">"Edit"</string>
     <string name="dialog_cancel">"Cancel"</string>
     <string name="main_add_player_button">Add</string>
     <string name="main_add_player_exists">already exists!</string>

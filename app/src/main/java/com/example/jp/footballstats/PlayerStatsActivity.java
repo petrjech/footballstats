@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -40,6 +41,13 @@ public class PlayerStatsActivity extends AppCompatActivity {
 
         ListView gameListView = (ListView) findViewById(R.id.game_list);
         gameListView.setAdapter(gameListAdapter);
+
+        gameListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Game game = (Game)parent.getItemAtPosition(position);
+                showGameDialog(game);
+            }
+        });
 
         populateGames();
     }
@@ -110,7 +118,7 @@ public class PlayerStatsActivity extends AppCompatActivity {
                         // do nothing
                     }
                 });
-        builder.setIcon(android.R.drawable.ic_delete);
+        builder.setIcon(android.R.drawable.ic_menu_delete);
         builder.show();
     }
 
@@ -118,5 +126,39 @@ public class PlayerStatsActivity extends AppCompatActivity {
         StatsDataAccessObject statsDAO;
         statsDAO = StatsDataAccessObject.getInstance(getApplicationContext());
         statsDAO.deletePlayer(playerID);
+    }
+
+    private void showGameDialog(final Game game) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(PlayerStatsActivity.this);
+        builder.setTitle(R.string.dialog_game_title);
+        builder.setMessage(R.string.dialog_game_message);
+        builder.setPositiveButton(R.string.dialog_game_delete, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                deleteGame(game);
+            }
+        });
+        builder.setNeutralButton(R.string.dialog_game_edit, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                editGame(game);
+            }
+        });
+        builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                // do nothing
+            }
+        });
+        builder.setIcon(android.R.drawable.ic_menu_info_details);
+        builder.show();
+    }
+
+    private void deleteGame(Game game){
+        StatsDataAccessObject statsDAO;
+        statsDAO = StatsDataAccessObject.getInstance(getApplicationContext());
+        statsDAO.deleteGame(game);
+        populateGames();
+    }
+
+    private void editGame(final Game game){
+        //todo implement game edit
     }
 }

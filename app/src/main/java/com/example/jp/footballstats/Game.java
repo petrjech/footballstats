@@ -2,14 +2,21 @@ package com.example.jp.footballstats;
 
 class Game {
 
-    private long     playerID;
-    private String   date;
-    private int      result;
-    private int      elo;
-    private String   note = "";
+    private long playerID;
+    private long gameID;
+    private String date;
+    private int result;
+    private int elo;
+    private String note = "";
 
-    Game (long playerID) {
-        this.playerID = playerID;
+    Game () {}
+
+    Game(long gameID) {
+        this.gameID = gameID;
+    }
+
+    long getGameID() {
+        return gameID;
     }
 
     void setDate(String date) {
@@ -26,6 +33,10 @@ class Game {
 
     void setNote(String note) {
         this.note = note;
+    }
+
+    void setPlayerID(long playerID) {
+        this.playerID = playerID;
     }
 
     long getPlayerID() {

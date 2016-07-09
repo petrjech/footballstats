@@ -31,7 +31,8 @@ public class AddGameActivity extends AppCompatActivity {
         long playerID = intent.getLongExtra("id", 0);
         String playerName = intent.getStringExtra("playerName");
 
-        game = new Game (playerID);
+        game = new Game();
+        game.setPlayerID(playerID);
 
         setTitle(playerName + "  " + getString(R.string.add_game_title_activity));
     }
@@ -59,9 +60,9 @@ public class AddGameActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void submitGame(View view){
+    public void submitGame(View view) {
 
-        if (! setGame()) return;
+        if (!setGame()) return;
 
         StatsDataAccessObject statsDAO;
         statsDAO = StatsDataAccessObject.getInstance(getApplicationContext());
@@ -73,10 +74,10 @@ public class AddGameActivity extends AppCompatActivity {
     }
 
     private boolean setGame() {
-        
-        if (! setGameResult()) return false;
 
-        if (! setGameElo()) return false;
+        if (!setGameResult()) return false;
+
+        if (!setGameElo()) return false;
 
         setGameDate();
 
@@ -86,13 +87,13 @@ public class AddGameActivity extends AppCompatActivity {
     }
 
     private boolean setGameResult() {
-        int checkedRadioButton = ((RadioGroup)findViewById(R.id.add_game_result_group)).getCheckedRadioButtonId();
+        int checkedRadioButton = ((RadioGroup) findViewById(R.id.add_game_result_group)).getCheckedRadioButtonId();
         if (checkedRadioButton < 0) {
             Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.add_game_result_error), Toast.LENGTH_SHORT);
             toast.show();
             return false;
         }
-        switch(checkedRadioButton) {
+        switch (checkedRadioButton) {
             case R.id.add_game_result_2:
                 game.setResult(2);
                 break;
@@ -116,7 +117,7 @@ public class AddGameActivity extends AppCompatActivity {
         int elo;
         try {
             elo = Integer.parseInt(eloString);
-        } catch(NumberFormatException nfe) {
+        } catch (NumberFormatException nfe) {
             Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.add_game_elo_error_not_number), Toast.LENGTH_SHORT);
             toast.show();
             return false;
