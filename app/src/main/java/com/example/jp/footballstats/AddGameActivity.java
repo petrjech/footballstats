@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ import java.util.Locale;
 public class AddGameActivity extends AppCompatActivity {
 
     private Game game;
+    private boolean gameEdit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +30,38 @@ public class AddGameActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        long playerID = intent.getLongExtra("id", 0);
-        String playerName = intent.getStringExtra("playerName");
+        gameEdit = intent.getStringExtra("action").equals("edit");
 
-        game = new Game();
-        game.setPlayerID(playerID);
+        if (gameEdit) {
+            game = new Game(intent.getLongExtra("game_id", 0L));
+            game.setDate(intent.getStringExtra("date"));
+            game.setElo(intent.getIntExtra("elo", 0));
+            game.setNote(getIntent().getStringExtra("note"));
+            game.setResult(intent.getIntExtra("result", 0));
+
+            ((EditText) findViewById(R.id.add_game_edit_elo)).setText(String.valueOf(game.getElo()));
+
+            if (!game.getNote().isEmpty()) {
+                ((EditText) findViewById(R.id.add_game_edit_note)).setText(game.getNote());
+            }
+
+            switch (game.getResult()) {
+                case 0:
+                    ((RadioButton) findViewById(R.id.add_game_result_0)).setChecked(true);
+                    break;
+                case 1:
+                    ((RadioButton) findViewById(R.id.add_game_result_1)).setChecked(true);
+                    break;
+                case R.id.add_game_result_2:
+                    ((RadioButton) findViewById(R.id.add_game_result_2)).setChecked(true);
+                    break;
+            }
+        } else {
+            game = new Game();
+        }
+
+        game.setPlayerID(intent.getLongExtra("id", 0));
+        String playerName = intent.getStringExtra("player");
 
         setTitle(playerName + "  " + getString(R.string.add_game_title_activity));
     }
@@ -66,7 +95,11 @@ public class AddGameActivity extends AppCompatActivity {
 
         StatsDataAccessObject statsDAO;
         statsDAO = StatsDataAccessObject.getInstance(getApplicationContext());
-        statsDAO.saveGame(game);
+        if (gameEdit) {
+            statsDAO.updateGame(game);
+        } else {
+            statsDAO.saveGame(game);
+        }
 
         Intent intent = new Intent();
         setResult(RESULT_OK, intent);
@@ -134,7 +167,7 @@ public class AddGameActivity extends AppCompatActivity {
 
     private void setGameNote() {
         String note = ((EditText) findViewById(R.id.add_game_edit_note)).getText().toString();
-        if (!note.isEmpty()) {
+        if (note != null) {
             game.setNote(note);
         }
     }

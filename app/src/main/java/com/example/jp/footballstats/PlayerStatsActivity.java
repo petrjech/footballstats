@@ -17,6 +17,7 @@ import java.util.ArrayList;
 public class PlayerStatsActivity extends AppCompatActivity {
 
     private final static int ADD_GAME_REQUEST = 0;
+    private final static int EDIT_GAME_REQUEST = 1;
 
     private ArrayList<Game> gameArrayList = new ArrayList<>();
     private GameListAdapter gameListAdapter;
@@ -44,7 +45,7 @@ public class PlayerStatsActivity extends AppCompatActivity {
 
         gameListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Game game = (Game)parent.getItemAtPosition(position);
+                Game game = (Game) parent.getItemAtPosition(position);
                 showGameDialog(game);
             }
         });
@@ -77,8 +78,9 @@ public class PlayerStatsActivity extends AppCompatActivity {
         }
     }
 
-    public void addGame(View view){
+    public void addGame(View view) {
         Intent intent = new Intent(getBaseContext(), AddGameActivity.class);
+        intent.putExtra("action", "add");
         intent.putExtra("id", playerID);
         intent.putExtra("playerName", player);
         startActivityForResult(intent, ADD_GAME_REQUEST);
@@ -93,9 +95,14 @@ public class PlayerStatsActivity extends AppCompatActivity {
                 setResult(RESULT_OK, intent);
             }
         }
+        if (requestCode == EDIT_GAME_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                populateGames();
+            }
+        }
     }
 
-    private void populateGames(){
+    private void populateGames() {
         StatsDataAccessObject statsDAO = StatsDataAccessObject.getInstance(this);
         statsDAO.searchGames(playerID, gameArrayList);
         gameListAdapter.notifyDataSetChanged();
@@ -106,18 +113,18 @@ public class PlayerStatsActivity extends AppCompatActivity {
         builder.setTitle(R.string.dialog_delete_player_title);
         builder.setMessage(getString(R.string.dialog_delete_player_message) + player + " ?");
         builder.setPositiveButton(R.string.dialog_delete_ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        deletePlayer();
-                        Intent intent = new Intent();
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    }
-                });
+            public void onClick(DialogInterface dialog, int which) {
+                deletePlayer();
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
         builder.setNegativeButton(R.string.dialog_cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                });
+            public void onClick(DialogInterface dialog, int which) {
+                // do nothing
+            }
+        });
         builder.setIcon(android.R.drawable.ic_menu_delete);
         builder.show();
     }
@@ -151,14 +158,23 @@ public class PlayerStatsActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private void deleteGame(Game game){
+    private void deleteGame(Game game) {
         StatsDataAccessObject statsDAO;
         statsDAO = StatsDataAccessObject.getInstance(getApplicationContext());
         statsDAO.deleteGame(game);
         populateGames();
     }
 
-    private void editGame(final Game game){
-        //todo implement game edit
+    private void editGame(final Game game) {
+        Intent intent = new Intent(getBaseContext(), AddGameActivity.class);
+        intent.putExtra("action", "edit");
+        intent.putExtra("id", playerID);
+        intent.putExtra("playerName", player);
+        intent.putExtra("date", game.getDate());
+        intent.putExtra("elo", game.getElo());
+        intent.putExtra("game_id", game.getGameID());
+        intent.putExtra("note", game.getNote());
+        intent.putExtra("result", game.getResult());
+        startActivityForResult(intent, EDIT_GAME_REQUEST);
     }
 }

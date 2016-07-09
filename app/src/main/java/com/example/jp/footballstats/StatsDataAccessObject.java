@@ -143,6 +143,19 @@ class StatsDataAccessObject {
         this.closeDB();
     }
 
+    void updateGame(Game game) {
+        ContentValues values = new ContentValues();
+        values.put("playerid", game.getPlayerID());
+        values.put("date", game.getDate());
+        values.put("result", game.getResult());
+        values.put("elo", game.getElo());
+        values.put("note", game.getNote());
+
+        this.openDB();
+        database.update("games", values, "rowid = ?", new String[]{"" + game.getGameID()});
+        this.closeDB();
+    }
+
     void deletePlayer(long playerID) {
         this.openDB();
         database.delete("games", "playerid = ?", new String[]{"" + playerID});
