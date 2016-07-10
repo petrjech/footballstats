@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 
         search_result_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Player player = (Player)parent.getItemAtPosition(position);
+                Player player = (Player) parent.getItemAtPosition(position);
                 openPlayerGameStats(player);
             }
         });
@@ -73,15 +73,18 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
 
-        //ToDo add menu support
+        if (id == R.id.show_stats) {
+            showStats();
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
 
-    public void addPlayer(View view){
+    public void addPlayer(View view) {
         EditText search_input_widget = (EditText) findViewById(R.id.search_input);
         String playerName = search_input_widget.getText().toString().trim();
-        if (playerName.isEmpty()){
+        if (playerName.isEmpty()) {
             Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.main_add_player_empty), Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.TOP, 0, 0);
             toast.show();
@@ -99,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
         openPlayerGameStats(newPlayer);
     }
 
-    private void openPlayerGameStats(Player player){
+    private void openPlayerGameStats(Player player) {
         Intent intent = new Intent(getBaseContext(), PlayerStatsActivity.class);
         intent.putExtra("id", player.getId());
         intent.putExtra("playerName", player.getName());
@@ -121,10 +124,12 @@ public class MainActivity extends AppCompatActivity {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
         }
+
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {
 
         }
+
         @Override
         public void afterTextChanged(Editable searchPlayerString) {
             //Log.d("afterTextChanged", "enter");
@@ -143,4 +148,9 @@ public class MainActivity extends AppCompatActivity {
             playerListAdapter.notifyDataSetChanged();
         }
     };
+
+    private void showStats() {
+        Intent intent = new Intent(getBaseContext(), ShowStatsActivity.class);
+        startActivity(intent);
+    }
 }

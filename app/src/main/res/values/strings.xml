@@ -13,6 +13,7 @@
     <string name="main_add_player_button">Add</string>
     <string name="main_add_player_exists">already exists!</string>
     <string name="main_add_player_empty">Enter name!</string>
+    <string name="main_show_stats">"Show statistics"</string>
     <string name="player_stats_add_game_button">Add Game</string>
     <string name="player_stats_title_activity">Stats</string>
     <string name="add_game_title_activity">Add game</string>
@@ -38,4 +39,11 @@
     <string name="game_list_item_result_won">Won</string>
     <string name="game_list_item_result_drawn">Drawn</string>
     <string name="game_list_item_result_lost">Lost</string>
+    <string name="show_stats_title">"Overall statistics"</string>
+    <string name="show_stats_total_games">"Games: "</string>
+    <string name="show_stats_total_wins">"Wins: "</string>
+    <string name="show_stats_total_draws">"Draws: "</string>
+    <string name="show_stats_total_loses">"Loses: "</string>
+    <string name="show_stats_counting">"counting…"</string>
+    <string name="show_stats_counting_short">"…"</string>
 </resources>
