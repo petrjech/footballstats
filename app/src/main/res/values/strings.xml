@@ -43,7 +43,10 @@
     <string name="show_stats_total_games">"Games: "</string>
     <string name="show_stats_total_wins">"Wins: "</string>
     <string name="show_stats_total_draws">"Draws: "</string>
-    <string name="show_stats_total_loses">"Loses: "</string>
+    <string name="show_stats_total_losses">"Losses: "</string>
     <string name="show_stats_counting">"counting…"</string>
     <string name="show_stats_counting_short">"…"</string>
+    <string name="show_stats_rating_average">"Your average rating: "</string>
+    <string name="show_stats_best_win">"Best win: "</string>
+    <string name="show_stats_worst_loss">"Worst loss: "</string>
 </resources>

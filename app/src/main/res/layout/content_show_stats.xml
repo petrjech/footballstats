@@ -68,14 +68,66 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.16"
-            android:text="@string/show_stats_total_loses" />
+            android:text="@string/show_stats_total_losses" />
 
         <TextView
-            android:id="@+id/show_stats_total_loses"
+            android:id="@+id/show_stats_total_losses"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="0.16"
             android:text="@string/show_stats_counting_short" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/show_stats_rating_average" />
+
+        <TextView
+            android:id="@+id/show_stats_rating_average"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="@string/show_stats_counting" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:text="@string/show_stats_best_win" />
+
+        <TextView
+            android:id="@+id/show_stats_best_win"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:text="@string/show_stats_counting_short" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:text="@string/show_stats_worst_loss" />
+
+        <TextView
+            android:id="@+id/show_stats_worst_loss"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25"
+            android:text="@string/show_stats_counting_short" />
 
     </LinearLayout>
+
 </LinearLayout>

@@ -168,4 +168,27 @@ class StatsDataAccessObject {
         database.delete("games", "rowid = ?", new String[]{"" + game.getGameID()});
         this.closeDB();
     }
+
+    void getGameResults(ArrayList<Integer> wins, ArrayList<Integer> draws, ArrayList<Integer> loses) {
+        int result;
+        this.openReadOnlyDB();
+        Cursor cursor = database.rawQuery("select elo, result from games", null);
+        cursor.moveToFirst();
+        while (!cursor.isAfterLast()) {
+            result = cursor.getInt(1);
+            switch (result) {
+                case 0:
+                    loses.add(cursor.getInt(0));
+                    break;
+                case 1:
+                    draws.add(cursor.getInt(0));
+                    break;
+                case 2:
+                    wins.add(cursor.getInt(0));
+                    break;
+            }
+            cursor.moveToNext();
+        }
+        this.closeDB();
+    }
 }
