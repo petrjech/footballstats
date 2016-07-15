@@ -18,6 +18,8 @@ public class ShowStatsActivity extends AppCompatActivity {
     private ArrayList<Integer> losses = new ArrayList<>();
     private ArrayList<Integer> draws = new ArrayList<>();
     private ArrayList<Integer> wins = new ArrayList<>();
+    private ArrayList<Integer> ratingChartColumns = new ArrayList<>();
+    private ArrayList<Integer> ratingChartColumnValues = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +71,10 @@ public class ShowStatsActivity extends AppCompatActivity {
 
             averageRating = getPlayerAverageRating();
             showRatingStats();
+
+            prepareChartData();
+
+            ((RatingChartView) findViewById(R.id.rating_chart_widget)).setChartData(ratingChartColumns, ratingChartColumnValues);
         }
     };
 
@@ -142,5 +148,32 @@ public class ShowStatsActivity extends AppCompatActivity {
             ceiling = wins.get(winsSize - pointer - 1);
         }
         return (lastFloor + lastCeiling) / 2;
+    }
+
+    private void prepareChartData(){
+        if (wins.size() == 0 || losses.size() == 0) return;
+        int column = Math.min(losses.get(0), wins.get(0)) / 100;
+        column *= 100;
+        int winsPointer = 0;
+        int lossesPointer = 0;
+        while (winsPointer < wins.size() || lossesPointer < losses.size()) {
+            int winsCounter = 0;
+            int lossesCounter = 0;
+            while (winsPointer < wins.size() && wins.get(winsPointer) < column + 100) {
+                winsCounter++;
+                winsPointer++;
+            }
+            while (lossesPointer < losses.size() && losses.get(lossesPointer) < column + 100) {
+                lossesCounter++;
+                lossesPointer++;
+            }
+            if (winsCounter + lossesCounter == 0) {
+                ratingChartColumnValues.add(null);
+            } else {
+                ratingChartColumnValues.add((100 * winsCounter) / (winsCounter + lossesCounter));
+            }
+            ratingChartColumns.add(column);
+            column += 100;
+        }
     }
 }
