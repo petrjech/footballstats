@@ -2,36 +2,36 @@ package com.example.jp.footballstats;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.graphics.drawable.Drawable;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.example.jp.footballstats.resources.Colors;
+
 import java.util.ArrayList;
 
-/**
- * TODO: document your custom view class.
- */
 public class RatingChartView extends View {
-    private String mExampleString = "Hello World!";
-    private int mExampleColor = Color.RED;
-    private float mExampleDimension = 20;
-    private Drawable mExampleDrawable;
+
+    private final static float CHART_PADDING = 0.02f;
+    private final static float CHART_STROKE_WIDTH = 0.005f;
+    private final static float CHART_STROKE_WIDTH_BOLD = 0.025f;
+    private final static float CHART_TEXT_SIZE = 20f;
+    private final static float CHART_ASPECT_RATIO = 0.67f;
 
     private TextPaint mTextPaint;
     private Paint mPaint;
-    private float mTextWidth;
-    private float mTextHeight;
-    private boolean vlastnost;
 
     private Path chartPath;
     private ArrayList<Integer> chartColumns;
-    private ArrayList<Integer> chartValues;
+    private ArrayList<Float> chartValues;
+    private int ratingAverage;
+    private float chartAveragePosition;
+    private boolean isChartDataSet = false;
 
     private int contentWidth, contentHeight;
+    private float chartOffset;
 
     public RatingChartView(Context context) {
         super(context);
@@ -44,53 +44,75 @@ public class RatingChartView extends View {
     }
 
     public void init() {
-        // Set up a default TextPaint object
         mTextPaint = new TextPaint();
         mTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
-        mTextPaint.setTextAlign(Paint.Align.LEFT);
-
-        // Update TextPaint and text measurements from attributes
-        invalidateTextPaintAndMeasurements();
+        mTextPaint.setTextSize(CHART_TEXT_SIZE);
+        mTextPaint.setColor(Colors.COLOR_CHART_TEXT);
 
         chartPath = new Path();
-
-        //mResultCanvas = new Canvas(mResultBitmap);
 
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
-        mPaint.setFilterBitmap(true);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeJoin(Paint.Join.ROUND);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
     }
 
     /**
      * Sets chart data
      *
      * @param columns chart X axis
-     * @param values chart Y axis
+     * @param values  chart Y axis
      */
-    protected void setChartData(final ArrayList<Integer> columns, final ArrayList<Integer> values) {
+    protected void setChartData(final ArrayList<Integer> columns, final ArrayList<Float> values, int ratingAverage) {
         chartColumns = columns;
         chartValues = values;
-        recalculateChartPath();
-        invalidate();
-    }
-
-    private void invalidateTextPaintAndMeasurements() {
-        mTextPaint.setTextSize(mExampleDimension);
-        mTextPaint.setColor(mExampleColor);
-        mTextWidth = mTextPaint.measureText(mExampleString);
-
-        Paint.FontMetrics fontMetrics = mTextPaint.getFontMetrics();
-        mTextHeight = fontMetrics.bottom;
+        this.ratingAverage = ratingAverage;
+        if (columns.size() > 1 && ratingAverage > 0) isChartDataSet = true;
+        if (isChartDataSet) {
+            recalculateChartPath();
+            invalidate();
+        }
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        // Draw the text.
-        canvas.drawText(mExampleString, (contentWidth - mTextWidth) / 2,  (contentHeight + mTextHeight) / 2, mTextPaint);
-        canvas.drawLine(0, 0, contentWidth, contentHeight, mPaint);
+        drawChartOutline(canvas);
+        if (isChartDataSet) {
+            drawChartData(canvas);
+            drawChartText(canvas);
+        }
+    }
+
+    private void drawChartOutline(Canvas canvas) {
+        mPaint.setColor(Colors.COLOR_CHART_OUTLINE);
+        mPaint.setStrokeWidth(contentWidth * CHART_STROKE_WIDTH);
+        canvas.drawRect(0f, 0f, contentWidth, contentHeight, mPaint);
+        mPaint.setColor(Colors.COLOR_CHART_OUTLINE_DIM);
+        canvas.drawLine(chartOffset, contentHeight / 2f, contentWidth - chartOffset, contentHeight / 2f, mPaint);
+        if (isChartDataSet) {
+            chartAveragePosition = chartOffset + ((((float) ratingAverage - chartColumns.get(0)) / (chartColumns.get(chartColumns.size() - 1) - chartColumns.get(0))) * (contentWidth - (2 * chartOffset)));
+            canvas.drawLine(chartAveragePosition, chartOffset, chartAveragePosition, contentHeight - chartOffset, mPaint);
+        }
+    }
+
+    private void drawChartData(Canvas canvas) {
+        mPaint.setColor(Colors.COLOR_CHART_DATA);
+        mPaint.setStrokeWidth(contentWidth * CHART_STROKE_WIDTH_BOLD);
+        canvas.drawPath(chartPath, mPaint);
+    }
+
+    private void drawChartText(Canvas canvas) {
+        mTextPaint.setTextAlign(Paint.Align.LEFT);
+        canvas.drawText("0", chartAveragePosition - chartOffset - (CHART_TEXT_SIZE / 2f), contentHeight - chartOffset, mTextPaint);
+        canvas.drawText("100", chartAveragePosition + chartOffset, chartOffset + CHART_TEXT_SIZE, mTextPaint);
+        canvas.drawText(chartColumns.get(0).toString(), chartOffset, (contentHeight / 2f) - chartOffset, mTextPaint);
+        canvas.drawText(String.valueOf(ratingAverage), chartAveragePosition + chartOffset, (contentHeight / 2f) - chartOffset, mTextPaint);
+        mTextPaint.setTextAlign(Paint.Align.RIGHT);
+        canvas.drawText(chartColumns.get(chartColumns.size() - 1).toString(), contentWidth - chartOffset, (contentHeight / 2f) - chartOffset, mTextPaint);
     }
 
     @Override
@@ -141,17 +163,21 @@ public class RatingChartView extends View {
         super.onSizeChanged(w, h, oldw, oldh);
         contentHeight = h - getPaddingLeft() - getPaddingRight();
         contentWidth = w - getPaddingTop() - getPaddingBottom();
-        recalculateChartPath();
+        chartOffset = contentWidth * CHART_PADDING;
+        if (contentHeight > contentWidth * CHART_ASPECT_RATIO)
+            contentHeight = (int) (contentWidth * CHART_ASPECT_RATIO);
+        if (isChartDataSet) recalculateChartPath();
     }
 
     private void recalculateChartPath() {
         chartPath.reset();
-        if (chartColumns == null || chartColumns.size() < 2) return;
         int columnsCount = chartColumns.size();
         float x, y;
+        float chartWidth = contentWidth - (2 * chartOffset);
+        float chartHeight = contentHeight - (2 * chartOffset);
         for (int column = 0; column < columnsCount; column++) {
-            x = ((contentWidth * column) / (columnsCount - 1));
-            y = (contentHeight * (100 - chartValues.get(column)));
+            x = chartOffset + ((chartWidth * column) / (columnsCount - 1));
+            y = chartOffset + (chartHeight * (1 - chartValues.get(column)));
             if (column == 0) {
                 chartPath.moveTo(x, y);
             } else {

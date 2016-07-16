@@ -19,7 +19,7 @@ public class ShowStatsActivity extends AppCompatActivity {
     private ArrayList<Integer> draws = new ArrayList<>();
     private ArrayList<Integer> wins = new ArrayList<>();
     private ArrayList<Integer> ratingChartColumns = new ArrayList<>();
-    private ArrayList<Integer> ratingChartColumnValues = new ArrayList<>();
+    private ArrayList<Float> ratingChartColumnValues = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +74,7 @@ public class ShowStatsActivity extends AppCompatActivity {
 
             prepareChartData();
 
-            ((RatingChartView) findViewById(R.id.rating_chart_widget)).setChartData(ratingChartColumns, ratingChartColumnValues);
+            ((RatingChartView) findViewById(R.id.rating_chart_widget)).setChartData(ratingChartColumns, ratingChartColumnValues, averageRating);
         }
     };
 
@@ -170,7 +170,7 @@ public class ShowStatsActivity extends AppCompatActivity {
             if (winsCounter + lossesCounter == 0) {
                 ratingChartColumnValues.add(null);
             } else {
-                ratingChartColumnValues.add((100 * winsCounter) / (winsCounter + lossesCounter));
+                ratingChartColumnValues.add(((float) winsCounter) / (winsCounter + lossesCounter));
             }
             ratingChartColumns.add(column);
             column += 100;
