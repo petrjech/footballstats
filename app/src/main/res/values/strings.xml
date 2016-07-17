@@ -49,4 +49,8 @@
     <string name="show_stats_rating_average">"Your average rating: "</string>
     <string name="show_stats_best_win">"Best win: "</string>
     <string name="show_stats_worst_loss">"Worst loss: "</string>
+    <string name="settings_title">"Settings"</string>
+    <string name="settings_backup_button">"Backup now"</string>
+    <string name="settings_backup_switch">"Automatic weekly backup is "</string>
+    <string name="settings_last_backup">"Last backup was at: "</string>
 </resources>
