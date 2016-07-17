@@ -82,10 +82,11 @@ public class AddGameActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
 
-        //ToDo add menu support
         return super.onOptionsItemSelected(item);
     }
 

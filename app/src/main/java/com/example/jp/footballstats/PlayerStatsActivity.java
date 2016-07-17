@@ -67,6 +67,8 @@ public class PlayerStatsActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         switch (item.getItemId()) {
             case R.id.action_settings:
+                Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+                startActivity(intent);
                 return true;
 
             case R.id.action_delete_player:

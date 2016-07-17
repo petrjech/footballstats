@@ -1,5 +1,6 @@
 package com.example.jp.footballstats;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -48,6 +49,8 @@ public class ShowStatsActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
 
@@ -74,61 +77,33 @@ public class ShowStatsActivity extends AppCompatActivity {
 
             prepareChartData();
 
-            ((RatingChartView) findViewById(R.id.rating_chart_widget)).setChartData(ratingChartColumns, ratingChartColumnValues, averageRating);
+            RatingChartView rcv = ((RatingChartView) findViewById(R.id.rating_chart_widget));
+            if (rcv != null) rcv.setChartData(ratingChartColumns, ratingChartColumnValues, averageRating);
         }
     };
 
     private void showTotals(){
-        ((TextView) findViewById(R.id.show_stats_total_games)).setText(String.valueOf(totalGames));
-        ((TextView) findViewById(R.id.show_stats_total_wins)).setText(String.valueOf(totalWins));
-        ((TextView) findViewById(R.id.show_stats_total_draws)).setText(String.valueOf(totalDraws));
-        ((TextView) findViewById(R.id.show_stats_total_losses)).setText(String.valueOf(totalLosses));
+        TextView tv = ((TextView) findViewById(R.id.show_stats_total_games));
+        if (tv != null) tv.setText(String.valueOf(totalGames));
+        tv = ((TextView) findViewById(R.id.show_stats_total_wins));
+        if (tv != null) tv.setText(String.valueOf(totalWins));
+        tv = ((TextView) findViewById(R.id.show_stats_total_draws));
+        if (tv != null) tv.setText(String.valueOf(totalDraws));
+        tv = ((TextView) findViewById(R.id.show_stats_total_losses));
+        if (tv != null) tv.setText(String.valueOf(totalLosses));
     }
 
     private void showRatingStats(){
-        ((TextView) findViewById(R.id.show_stats_rating_average)).setText(String.valueOf(averageRating));
-        if (wins.size() > 0) ((TextView) findViewById(R.id.show_stats_best_win)).setText(String.valueOf(wins.get(wins.size() - 1).toString()));
-        if (losses.size() > 0) ((TextView) findViewById(R.id.show_stats_worst_loss)).setText(String.valueOf(losses.get(0).toString()));
-    }
-
-    static int findLowestHigherElo(ArrayList<Integer> list, int elo) {
-        int size = list.size();
-        if (size < 2) return 0;
-        if (list.get(0) > elo) return 0;
-        int floor = 0;
-        int ceiling = size - 1;
-        int pointer;
-        int value;
-        while (floor < ceiling - 1) {
-            pointer = (floor + ceiling) / 2;
-            value = list.get(pointer);
-            if (value <= elo) {
-                floor = pointer;
-            } else {
-                ceiling = pointer;
-            }
+        TextView tv = ((TextView) findViewById(R.id.show_stats_rating_average));
+        if (tv != null) tv.setText(String.valueOf(averageRating));
+        if (wins.size() > 0) {
+            tv = ((TextView) findViewById(R.id.show_stats_best_win));
+            if (tv != null) tv.setText(String.valueOf(wins.get(wins.size() - 1).toString()));
         }
-        return ceiling;
-    }
-
-    static int findHighestLowerElo(ArrayList<Integer> list, int elo) {
-        int size = list.size();
-        if (size < 2) return 0;
-        if (list.get(size - 1) < elo) return size - 1;
-        int floor = 0;
-        int ceiling = size - 1;
-        int pointer;
-        int value;
-        while (floor < ceiling - 1) {
-            pointer = (floor + ceiling) / 2;
-            value = list.get(pointer);
-            if (value < elo) {
-                floor = pointer;
-            } else {
-                ceiling = pointer;
-            }
+        if (losses.size() > 0) {
+            tv = ((TextView) findViewById(R.id.show_stats_worst_loss));
+            if (tv != null) tv.setText(String.valueOf(losses.get(0).toString()));
         }
-        return floor;
     }
 
     int getPlayerAverageRating() {
