@@ -52,6 +52,8 @@ public class MainActivity extends AppCompatActivity {
 
         EditText search_input_widget = (EditText) findViewById(R.id.search_input);
         search_input_widget.addTextChangedListener(searchPlayerWatcher);
+
+        //TODO check automatic database backup settings and do backup if needed
     }
 
     @Override
