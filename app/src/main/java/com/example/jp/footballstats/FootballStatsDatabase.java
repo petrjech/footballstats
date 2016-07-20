@@ -1,11 +1,14 @@
 package com.example.jp.footballstats;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Environment;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.example.jp.footballstats.resources.Preferences;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,6 +16,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.channels.FileChannel;
+import java.util.Date;
 
 class FootballStatsDatabase extends SQLiteOpenHelper {
 
@@ -36,10 +40,16 @@ class FootballStatsDatabase extends SQLiteOpenHelper {
         throw new UnsupportedOperationException("Version 1 - upgrading of the database isn't implemented");
     }
 
-    protected static String checkLastBackup() {
-        String result = "";
-        //TODO implement backup check
-        return result;
+    protected static String checkLastBackup(Context context) {
+        SharedPreferences settings = context.getSharedPreferences(Preferences.PREFS_NAME, 0);
+        String backupPath = settings.getString(Preferences.BACKUP_PATH, "");
+        File backup = new File(backupPath, DATABASE_BACKUP_NAME);
+        Date lastModDate = null;
+        if (backup.exists()) {
+            lastModDate = new Date(backup.lastModified());
+        }
+        if (lastModDate == null) return null;
+        return lastModDate.toString();
     }
 
     protected static boolean backupDatabase(Context context){
@@ -89,6 +99,14 @@ class FootballStatsDatabase extends SQLiteOpenHelper {
             catch(IOException ignored) {}
 
         }
+        if (isResultOK) saveBackupPath(context, sd.toString());
         return isResultOK;
+    }
+
+    private static void saveBackupPath(Context context, String path) {
+        SharedPreferences settings = context.getSharedPreferences(Preferences.PREFS_NAME, 0);
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putString(Preferences.BACKUP_PATH, path);
+        editor.apply();
     }
 }
