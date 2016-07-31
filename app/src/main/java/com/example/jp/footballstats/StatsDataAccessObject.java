@@ -121,9 +121,10 @@ class StatsDataAccessObject {
         return new Player(insertId, player);
     }
 
+    // Case sensitive
     boolean containsPlayer(String name) {
         this.openReadOnlyDB();
-        Cursor cursor = database.rawQuery("select * from players where player like ? limit ?", new String[]{name, SEARCH_LIMIT});
+        Cursor cursor = database.rawQuery("select * from players where player = ? collate binary limit 1", new String[]{name});
         boolean result = cursor.getCount() == 1;
         cursor.close();
         this.closeDB();
