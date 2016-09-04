@@ -3,6 +3,7 @@ package com.example.jp.footballstats;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -16,17 +17,22 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.jp.footballstats.resources.Preferences;
+
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
     private final static int OPEN_PLAYER_REQUEST = 0;
+    private final static long BACKUP_START_DELAY = 1000;
 
     private ArrayList<Player> searchPlayerResults = new ArrayList<>();
     private PlayerListAdapter playerListAdapter;
     private String searchPlayerCache = "";
 
-    static String displayDateFormat;
+    private Handler handlerAutomaticBackup = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,9 +40,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        SharedPreferences settings = getSharedPreferences("preferences", 0);
-        displayDateFormat = settings.getString("dateFormat", "dd.MM.yyyy");
 
         playerListAdapter = new PlayerListAdapter(this, searchPlayerResults);
 
@@ -53,8 +56,30 @@ public class MainActivity extends AppCompatActivity {
         EditText search_input_widget = (EditText) findViewById(R.id.search_input);
         search_input_widget.addTextChangedListener(searchPlayerWatcher);
 
-        //TODO check automatic database backup settings and do backup if needed
+        checkAutomaticBackup();
     }
+
+    private void checkAutomaticBackup() {
+        SharedPreferences settings = getSharedPreferences(Preferences.PREFS_NAME, 0);
+        boolean isAutomaticBackupOn = settings.getBoolean(Preferences.IS_AUTOMATIC_BACKUP_ON, false);
+        if (isAutomaticBackupOn) {
+            Date lastBackup = FootballStatsDatabase.checkLastBackup(getBaseContext());
+
+            Calendar cal = Calendar.getInstance();
+            cal.add(Calendar.DATE, - Preferences.BACKUP_FREQUENCY_IN_DAYS);
+            Date dateToCompare = cal.getTime();
+            if (lastBackup == null || lastBackup.before(dateToCompare)) {
+                handlerAutomaticBackup.postDelayed(startBackup , BACKUP_START_DELAY);
+            }
+        }
+    }
+
+    private Runnable startBackup = new Runnable() {
+        @Override
+        public void run() {
+            FootballStatsDatabase.backupDatabase(getBaseContext(), this);
+        }
+    };
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -2,6 +2,7 @@ package com.example.jp.footballstats;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -11,9 +12,13 @@ import android.widget.TextView;
 
 import com.example.jp.footballstats.resources.Preferences;
 
+import java.util.Date;
+
+
 public class SettingsActivity extends AppCompatActivity {
 
     private boolean isAutomaticBackupOn;
+    private Handler handler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +44,15 @@ public class SettingsActivity extends AppCompatActivity {
             });
         }
 
-        String lastBackup = FootballStatsDatabase.checkLastBackup(getBaseContext());
-        if (lastBackup == null || lastBackup.isEmpty()) {
-            lastBackup = getString(R.string.settings_last_backup_empty);
+        Date lastBackup = FootballStatsDatabase.checkLastBackup(getBaseContext());
+        String lastBackupString;
+        if (lastBackup == null) {
+            lastBackupString = getString(R.string.settings_last_backup_empty);
+        } else {
+            lastBackupString = Preferences.getFormatedDateTime(lastBackup);
         }
         TextView tv = (TextView) findViewById(R.id.setting_backup_date);
-        if (tv != null) tv.setText(lastBackup);
+        if (tv != null) tv.setText(lastBackupString);
     }
 
     @Override
@@ -67,8 +75,22 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public void backupNow(View view){
-        boolean result = FootballStatsDatabase.backupDatabase(getBaseContext());
-        //TODO change last backup date
-        //TODO consider backup in new thread and callback
+        handler.postDelayed(startBackup, 100L);
     }
+
+    public void restoreNow(View view) {
+        //TODO implement backup restore
+    }
+
+    private Runnable startBackup = new Runnable() {
+        @Override
+        public void run() {
+            boolean resultOK = FootballStatsDatabase.backupDatabase(getBaseContext(), this);
+
+            if (resultOK) {
+                TextView tv = (TextView) findViewById(R.id.setting_backup_date);
+                if (tv != null) tv.setText(Preferences.getFormatedDateTime(new Date()));
+            }
+        }
+    };
 }

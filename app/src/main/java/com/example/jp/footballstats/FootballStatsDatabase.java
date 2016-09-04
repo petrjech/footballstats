@@ -40,7 +40,7 @@ class FootballStatsDatabase extends SQLiteOpenHelper {
         throw new UnsupportedOperationException("Version 1 - upgrading of the database isn't implemented");
     }
 
-    protected static String checkLastBackup(Context context) {
+    protected static Date checkLastBackup(Context context) {
         SharedPreferences settings = context.getSharedPreferences(Preferences.PREFS_NAME, 0);
         String backupPath = settings.getString(Preferences.BACKUP_PATH, "");
         File backup = new File(backupPath, DATABASE_BACKUP_NAME);
@@ -49,10 +49,33 @@ class FootballStatsDatabase extends SQLiteOpenHelper {
             lastModDate = new Date(backup.lastModified());
         }
         if (lastModDate == null) return null;
-        return lastModDate.toString();
+        return lastModDate;
     }
 
-    protected static boolean backupDatabase(Context context){
+    protected static boolean backupDatabase(Context context, Runnable thread) {
+        boolean resultOK;
+        int attempts = 1;
+
+        while (true) {
+            resultOK = backupDatabaseAttempt(context);
+
+            if (resultOK) {
+                break;
+            }
+
+            attempts++;
+            if (attempts > Preferences.BACKUP_RETRY_TIMES) {
+                break;
+            }
+
+            try {
+                thread.wait(Preferences.BACKUP_RETRY_TIME);
+            } catch(InterruptedException ignore) { }
+        }
+        return resultOK;
+    }
+
+    private static boolean backupDatabaseAttempt(Context context){
         boolean isResultOK = true;
 
         File sd = Environment.getExternalStorageDirectory();

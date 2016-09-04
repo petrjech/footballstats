@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.jp.footballstats.resources.Preferences;
+
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -84,11 +86,10 @@ class GameListAdapter extends BaseAdapter{
         void setDate(String gameDate){
             String dateString;
             DateFormat dateFormatIn  = new SimpleDateFormat(StatsDataAccessObject.DATE_FORMAT, Locale.US);
-            DateFormat dateFormatOut = new SimpleDateFormat(MainActivity.displayDateFormat, Locale.US);
             try {
                 if (gameDate == null) throw (new ParseException("", 0));
                 Date date = dateFormatIn.parse(gameDate);
-                dateString = dateFormatOut.format(date);
+                dateString = Preferences.getFormatedDate(date);
             } catch (ParseException e) {
                 dateString = context.getString(R.string.game_list_date_error);
             }
