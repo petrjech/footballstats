@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        initTasks();
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -55,13 +58,23 @@ public class MainActivity extends AppCompatActivity {
 
         EditText search_input_widget = (EditText) findViewById(R.id.search_input);
         search_input_widget.addTextChangedListener(searchPlayerWatcher);
-
-        checkAutomaticBackup();
     }
 
-    private void checkAutomaticBackup() {
+    private void initTasks() {
         SharedPreferences settings = getSharedPreferences(Preferences.PREFS_NAME, 0);
+
+        boolean initDatabaseRestore = settings.getBoolean(Preferences.INIT_DATABASE_RESTORE, false);
         boolean isAutomaticBackupOn = settings.getBoolean(Preferences.IS_AUTOMATIC_BACKUP_ON, false);
+
+        if (initDatabaseRestore) {
+            initDatabaseRestore = false;
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean(Preferences.INIT_DATABASE_RESTORE, initDatabaseRestore);
+            editor.apply();
+
+            FootballStatsDatabase.restoreDatabase(getBaseContext());
+        }
+
         if (isAutomaticBackupOn) {
             Date lastBackup = FootballStatsDatabase.checkLastBackup(getBaseContext());
 

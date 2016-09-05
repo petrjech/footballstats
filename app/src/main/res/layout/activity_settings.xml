@@ -75,5 +75,14 @@
             android:text="@string/settings_backup_button"
             android:textColor="@android:color/primary_text_dark" />
 
+        <Button
+            android:id="@+id/restore_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5pt"
+            android:onClick="showRestoreDialog"
+            android:text="@string/settings_restore_button"
+            android:textColor="@android:color/primary_text_dark" />
+
     </LinearLayout>
 </android.support.design.widget.CoordinatorLayout>

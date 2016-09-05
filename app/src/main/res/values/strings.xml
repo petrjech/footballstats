@@ -9,6 +9,9 @@
     <string name="dialog_game_message">"Do you want to edit/delete this game?"</string>
     <string name="dialog_game_delete">"Delete"</string>
     <string name="dialog_game_edit">"Edit"</string>
+    <string name="dialog_restore_database_title">"Restore Database"</string>
+    <string name="dialog_restore_database_message">"This will permanently overwrite current database. Are you sure you want to proceed?"</string>
+    <string name="dialog_restore_database_ok">"Restore"</string>
     <string name="dialog_cancel">"Cancel"</string>
     <string name="main_add_player_button">Add</string>
     <string name="main_add_player_exists">already exists!</string>
@@ -54,6 +57,7 @@
     <string name="settings_backup_switch">"Automatic weekly backup is "</string>
     <string name="settings_last_backup">"Last backup was at: "</string>
     <string name="settings_last_backup_empty">"backup not found…"</string>
+    <string name="settings_restore_button">"RESTORE DATABASE"</string>
     <string name="error_backup_no_sd">"Backup failed\nSD memory not available"</string>
     <string name="error_no_database">"Backup failed\nDatabase not available"</string>
     <string name="error_open_backup_file">"Backup failed\nCouldn't open backup file"</string>

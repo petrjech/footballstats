@@ -75,6 +75,39 @@ class FootballStatsDatabase extends SQLiteOpenHelper {
         return resultOK;
     }
 
+    protected static void restoreDatabase(Context context) {
+        File sd = Environment.getExternalStorageDirectory();
+
+        String sep = File.separator;
+        String databasePath = sep + sep + "data" + sep + sep + "data" + sep + sep + context.getPackageName() + sep + sep + "databases" + sep + sep;
+
+        File databaseFile = new File(databasePath, DATABASE_NAME);
+        File backupFile = new File(sd, DATABASE_BACKUP_NAME);
+
+        FileChannel src = null;
+        FileChannel dst = null;
+        try {
+            src = new FileInputStream(backupFile).getChannel();
+            dst = new FileOutputStream(databaseFile).getChannel();
+            dst.transferFrom(src, 0, src.size());
+        } catch (FileNotFoundException e) {
+            Toast toast = Toast.makeText(context, context.getString(R.string.error_open_backup_file), Toast.LENGTH_LONG);
+            toast.show();
+            e.printStackTrace();
+        } catch (IOException e) {
+            Toast toast = Toast.makeText(context, context.getString(R.string.error_write_backup), Toast.LENGTH_LONG);
+            toast.show();
+            e.printStackTrace();
+        } finally {
+            try
+            {
+                if (src != null) src.close();
+                if (dst != null) dst.close();
+            }
+            catch(IOException ignored) {}
+        }
+    }
+
     private static boolean backupDatabaseAttempt(Context context){
         boolean isResultOK = true;
 

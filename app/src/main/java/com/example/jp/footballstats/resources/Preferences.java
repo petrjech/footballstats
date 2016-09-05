@@ -14,6 +14,7 @@ public class Preferences {
     public static final String DATE_FORMAT = "dd.MM.yyyy";
     public static final String DATE_TIME_FORMAT = "dd.MM.yyyy HH:mm:ss";
     public static final int BACKUP_FREQUENCY_IN_DAYS = 1;
+    public static final String INIT_DATABASE_RESTORE = "initDatabaseRestore";
 
     public static String getFormatedDate(Date date) {
         return new SimpleDateFormat(DATE_FORMAT, Locale.US).format(date);
