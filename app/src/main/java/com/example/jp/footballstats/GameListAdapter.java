@@ -19,9 +19,9 @@ import java.util.Locale;
 
 class GameListAdapter extends BaseAdapter{
 
-    private ArrayList<Game> gameList;
-    private LayoutInflater mInflater;
-    private Context context;
+    private final ArrayList<Game> gameList;
+    private final LayoutInflater mInflater;
+    private final Context context;
 
     GameListAdapter(Context context, ArrayList<Game> myList) {
         this.gameList = myList;
@@ -67,12 +67,12 @@ class GameListAdapter extends BaseAdapter{
     }
 
     private static class MyViewHolder {
-        TextView gameListItemDate;
-        TextView gameListItemElo;
-        TextView gameListItemResult;
-        LinearLayout gameListNoteLayout;
-        TextView gameListItemNote;
-        Context context;
+        final TextView gameListItemDate;
+        final TextView gameListItemElo;
+        final TextView gameListItemResult;
+        final LinearLayout gameListNoteLayout;
+        final TextView gameListItemNote;
+        final Context context;
 
         MyViewHolder(View convertView, Context context){
             this.gameListItemDate = (TextView) convertView.findViewById(R.id.game_list_item_date);
@@ -89,7 +89,7 @@ class GameListAdapter extends BaseAdapter{
             try {
                 if (gameDate == null) throw (new ParseException("", 0));
                 Date date = dateFormatIn.parse(gameDate);
-                dateString = Preferences.getFormatedDate(date);
+                dateString = Preferences.getFormattedDate(date);
             } catch (ParseException e) {
                 dateString = context.getString(R.string.game_list_date_error);
             }

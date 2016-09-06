@@ -2,8 +2,8 @@ package com.example.jp.footballstats;
 
 class Player {
 
-    private long id;
-    private String name;
+    private final long id;
+    private final String name;
 
     Player(long id, String name) {
         this.id     = id;

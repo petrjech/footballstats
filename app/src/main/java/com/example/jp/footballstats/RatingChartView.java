@@ -43,7 +43,7 @@ public class RatingChartView extends View {
         init();
     }
 
-    public void init() {
+    private void init() {
         mTextPaint = new TextPaint();
         mTextPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
         mTextPaint.setTextSize(CHART_TEXT_SIZE);
@@ -65,7 +65,7 @@ public class RatingChartView extends View {
      * @param columns chart X axis
      * @param values  chart Y axis
      */
-    protected void setChartData(final ArrayList<Integer> columns, final ArrayList<Float> values, int ratingAverage) {
+    void setChartData(final ArrayList<Integer> columns, final ArrayList<Float> values, int ratingAverage) {
         chartColumns = columns;
         chartValues = values;
         this.ratingAverage = ratingAverage;
@@ -159,10 +159,10 @@ public class RatingChartView extends View {
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-        contentHeight = h - getPaddingLeft() - getPaddingRight();
-        contentWidth = w - getPaddingTop() - getPaddingBottom();
+    protected void onSizeChanged(int width, int height, int oldWidth, int oldHeight) {
+        super.onSizeChanged(width, height, oldWidth, oldHeight);
+        contentHeight = height - getPaddingLeft() - getPaddingRight();
+        contentWidth = width - getPaddingTop() - getPaddingBottom();
         chartOffset = contentWidth * CHART_PADDING;
         if (contentHeight > contentWidth * CHART_ASPECT_RATIO)
             contentHeight = (int) (contentWidth * CHART_ASPECT_RATIO);

@@ -12,8 +12,8 @@ import java.util.List;
 
 class PlayerListAdapter extends BaseAdapter {
 
-    private List<Player> playerList; // = new ArrayList<>();
-    private LayoutInflater mInflater;
+    private final List<Player> playerList; // = new ArrayList<>();
+    private final LayoutInflater mInflater;
 
     PlayerListAdapter(Context context, ArrayList<Player> myList) {
         this.playerList = myList;
@@ -55,7 +55,7 @@ class PlayerListAdapter extends BaseAdapter {
     }
 
     private class MyViewHolder {
-        TextView tvPlayer;
+        final TextView tvPlayer;
 
         MyViewHolder(View item) {
             tvPlayer = (TextView) item.findViewById(R.id.tvPlayer);

@@ -14,13 +14,13 @@ import java.util.Collections;
 
 public class ShowStatsActivity extends AppCompatActivity {
 
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
     private int totalGames, totalWins, totalDraws, totalLosses, averageRating;
-    private ArrayList<Integer> losses = new ArrayList<>();
-    private ArrayList<Integer> draws = new ArrayList<>();
-    private ArrayList<Integer> wins = new ArrayList<>();
-    private ArrayList<Integer> ratingChartColumns = new ArrayList<>();
-    private ArrayList<Float> ratingChartColumnValues = new ArrayList<>();
+    private final ArrayList<Integer> losses = new ArrayList<>();
+    private final ArrayList<Integer> draws = new ArrayList<>();
+    private final ArrayList<Integer> wins = new ArrayList<>();
+    private final ArrayList<Integer> ratingChartColumns = new ArrayList<>();
+    private final ArrayList<Float> ratingChartColumnValues = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +57,7 @@ public class ShowStatsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private Runnable countTotals = new Runnable() {
+    private final Runnable countTotals = new Runnable() {
         @Override
         public void run() {
             StatsDataAccessObject statsDAO;
@@ -106,7 +106,7 @@ public class ShowStatsActivity extends AppCompatActivity {
         }
     }
 
-    int getPlayerAverageRating() {
+    private int getPlayerAverageRating() {
         int winsSize = wins.size();
         int lossesSize = losses.size();
         if (winsSize < 1 || lossesSize < 1) return 0;

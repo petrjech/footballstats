@@ -39,21 +39,31 @@ public class AddGameActivity extends AppCompatActivity {
             game.setNote(getIntent().getStringExtra("note"));
             game.setResult(intent.getIntExtra("result", 0));
 
-            ((EditText) findViewById(R.id.add_game_edit_elo)).setText(String.valueOf(game.getElo()));
+            EditText editTextElo = (EditText) findViewById(R.id.add_game_edit_elo);
+            assert editTextElo != null;
+            editTextElo.setText(String.valueOf(game.getElo()));
 
             if (!game.getNote().isEmpty()) {
-                ((EditText) findViewById(R.id.add_game_edit_note)).setText(game.getNote());
+                EditText editTextNote = (EditText) findViewById(R.id.add_game_edit_note);
+                assert editTextNote != null;
+                editTextNote.setText(game.getNote());
             }
 
             switch (game.getResult()) {
                 case 0:
-                    ((RadioButton) findViewById(R.id.add_game_result_0)).setChecked(true);
+                    RadioButton radioButton0 = (RadioButton) findViewById(R.id.add_game_result_0);
+                    assert radioButton0 != null;
+                    radioButton0.setChecked(true);
                     break;
                 case 1:
-                    ((RadioButton) findViewById(R.id.add_game_result_1)).setChecked(true);
+                    RadioButton radioButton1 = (RadioButton) findViewById(R.id.add_game_result_1);
+                    assert radioButton1 != null;
+                    radioButton1.setChecked(true);
                     break;
                 case R.id.add_game_result_2:
-                    ((RadioButton) findViewById(R.id.add_game_result_2)).setChecked(true);
+                    RadioButton radioButton2 = (RadioButton) findViewById(R.id.add_game_result_2);
+                    assert radioButton2 != null;
+                    radioButton2.setChecked(true);
                     break;
             }
         } else {
@@ -90,7 +100,7 @@ public class AddGameActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void submitGame(View view) {
+    public void submitGame(@SuppressWarnings("UnusedParameters") View view) {
 
         if (!setGame()) return;
 
@@ -121,7 +131,9 @@ public class AddGameActivity extends AppCompatActivity {
     }
 
     private boolean setGameResult() {
-        int checkedRadioButton = ((RadioGroup) findViewById(R.id.add_game_result_group)).getCheckedRadioButtonId();
+        RadioGroup radioGroup = (RadioGroup) findViewById(R.id.add_game_result_group);
+        assert radioGroup != null;
+        int checkedRadioButton = radioGroup.getCheckedRadioButtonId();
         if (checkedRadioButton < 0) {
             Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.add_game_result_error), Toast.LENGTH_SHORT);
             toast.show();
@@ -142,7 +154,9 @@ public class AddGameActivity extends AppCompatActivity {
     }
 
     private boolean setGameElo() {
-        String eloString = ((EditText) findViewById(R.id.add_game_edit_elo)).getText().toString();
+        EditText editText = (EditText) findViewById(R.id.add_game_edit_elo);
+        assert editText != null;
+        String eloString = editText.getText().toString();
         if (eloString.isEmpty()) {
             Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.add_game_elo_error_empty), Toast.LENGTH_SHORT);
             toast.show();
@@ -167,9 +181,9 @@ public class AddGameActivity extends AppCompatActivity {
     }
 
     private void setGameNote() {
-        String note = ((EditText) findViewById(R.id.add_game_edit_note)).getText().toString();
-        if (note != null) {
-            game.setNote(note);
-        }
+        EditText editText = (EditText) findViewById(R.id.add_game_edit_note);
+        assert editText != null;
+        String note = editText.getText().toString();
+        game.setNote(note);
     }
 }

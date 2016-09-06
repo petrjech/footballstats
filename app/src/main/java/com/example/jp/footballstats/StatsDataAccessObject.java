@@ -17,7 +17,7 @@ class StatsDataAccessObject {
     private static StatsDataAccessObject instance = null;
 
     private SQLiteDatabase database;
-    private FootballStatsDatabase dbHelper;
+    private final FootballStatsDatabase dbHelper;
 
     private StatsDataAccessObject(Context context) {
         dbHelper = new FootballStatsDatabase(context);
@@ -48,15 +48,15 @@ class StatsDataAccessObject {
                 + ");";
     }
 
-    void openDB() throws SQLException {
+    private void openDB() throws SQLException {
         database = dbHelper.getWritableDatabase();
     }
 
-    void openReadOnlyDB() throws SQLException {
+    private void openReadOnlyDB() throws SQLException {
         database = dbHelper.getReadableDatabase();
     }
 
-    void closeDB() {
+    private void closeDB() {
         dbHelper.close();
     }
 
@@ -190,6 +190,7 @@ class StatsDataAccessObject {
             }
             cursor.moveToNext();
         }
+        cursor.close();
         this.closeDB();
     }
 }

@@ -28,11 +28,11 @@ public class MainActivity extends AppCompatActivity {
     private final static int OPEN_PLAYER_REQUEST = 0;
     private final static long BACKUP_START_DELAY = 1000;
 
-    private ArrayList<Player> searchPlayerResults = new ArrayList<>();
+    private final ArrayList<Player> searchPlayerResults = new ArrayList<>();
     private PlayerListAdapter playerListAdapter;
     private String searchPlayerCache = "";
 
-    private Handler handlerAutomaticBackup = new Handler();
+    private final Handler handlerAutomaticBackup = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         playerListAdapter = new PlayerListAdapter(this, searchPlayerResults);
 
         ListView search_result_list = (ListView) findViewById(R.id.search_result_list);
+        assert search_result_list != null;
         search_result_list.setAdapter(playerListAdapter);
 
         search_result_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         EditText search_input_widget = (EditText) findViewById(R.id.search_input);
+        assert search_input_widget != null;
         search_input_widget.addTextChangedListener(searchPlayerWatcher);
     }
 
@@ -67,9 +69,8 @@ public class MainActivity extends AppCompatActivity {
         boolean isAutomaticBackupOn = settings.getBoolean(Preferences.IS_AUTOMATIC_BACKUP_ON, false);
 
         if (initDatabaseRestore) {
-            initDatabaseRestore = false;
             SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean(Preferences.INIT_DATABASE_RESTORE, initDatabaseRestore);
+            editor.putBoolean(Preferences.INIT_DATABASE_RESTORE, false);
             editor.apply();
 
             FootballStatsDatabase.restoreDatabase(getBaseContext());
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private Runnable startBackup = new Runnable() {
+    private final Runnable startBackup = new Runnable() {
         @Override
         public void run() {
             FootballStatsDatabase.backupDatabase(getBaseContext(), this);
@@ -123,8 +124,9 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void addPlayer(View view) {
+    public void addPlayer(@SuppressWarnings("UnusedParameters") View view) {
         EditText search_input_widget = (EditText) findViewById(R.id.search_input);
+        assert search_input_widget != null;
         String playerName = search_input_widget.getText().toString().trim();
         if (playerName.isEmpty()) {
             Toast toast = Toast.makeText(getApplicationContext(), getString(R.string.main_add_player_empty), Toast.LENGTH_SHORT);
@@ -156,12 +158,13 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == OPEN_PLAYER_REQUEST) {
             if (resultCode == RESULT_OK) {
                 EditText search_input_widget = (EditText) findViewById(R.id.search_input);
+                assert search_input_widget != null;
                 search_input_widget.setText("");
             }
         }
     }
 
-    private TextWatcher searchPlayerWatcher = new TextWatcher() {
+    private final TextWatcher searchPlayerWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 

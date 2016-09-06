@@ -26,7 +26,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private boolean isAutomaticBackupOn;
     private boolean initRestoreDatabase = false;
-    private Handler handler = new Handler();
+    private final Handler handler = new Handler();
     private boolean restoreButton;
 
     @Override
@@ -59,7 +59,7 @@ public class SettingsActivity extends AppCompatActivity {
             lastBackupString = getString(R.string.settings_last_backup_empty);
             restoreButton = false;
         } else {
-            lastBackupString = Preferences.getFormatedDateTime(lastBackup);
+            lastBackupString = Preferences.getFormattedDateTime(lastBackup);
             restoreButton = true;
         }
         TextView tv = (TextView) findViewById(R.id.setting_backup_date);
@@ -70,6 +70,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void toggleRestoreButton(boolean isEnabled) {
         Button button = (Button) findViewById(R.id.restore_button);
+        assert button != null;
         button.setEnabled(isEnabled);
     }
 
@@ -99,11 +100,11 @@ public class SettingsActivity extends AppCompatActivity {
         isAutomaticBackupOn = true;
     }
 
-    public void backupNow(View view){
+    public void backupNow(@SuppressWarnings("UnusedParameters") View view){
         handler.postDelayed(startBackup, 100L);
     }
 
-    public void showRestoreDialog(View view) {
+    public void showRestoreDialog(@SuppressWarnings("UnusedParameters") View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(SettingsActivity.this);
         builder.setTitle(R.string.dialog_restore_database_title);
         builder.setMessage(getString(R.string.dialog_restore_database_message));
@@ -138,17 +139,17 @@ public class SettingsActivity extends AppCompatActivity {
         this.finishAffinity();
     }
 
-    private Runnable startBackup = new Runnable() {
+    private final Runnable startBackup = new Runnable() {
         @Override
         public void run() {
             boolean resultOK = FootballStatsDatabase.backupDatabase(getBaseContext(), this);
 
             if (resultOK) {
                 TextView tv = (TextView) findViewById(R.id.setting_backup_date);
-                if (tv != null) tv.setText(Preferences.getFormatedDateTime(new Date()));
+                if (tv != null) tv.setText(Preferences.getFormattedDateTime(new Date()));
                 if (!restoreButton) {
                     restoreButton = true;
-                    toggleRestoreButton(restoreButton);
+                    toggleRestoreButton(true);
                 }
             }
         }

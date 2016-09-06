@@ -19,7 +19,7 @@ public class PlayerStatsActivity extends AppCompatActivity {
     private final static int ADD_GAME_REQUEST = 0;
     private final static int EDIT_GAME_REQUEST = 1;
 
-    private ArrayList<Game> gameArrayList = new ArrayList<>();
+    private final ArrayList<Game> gameArrayList = new ArrayList<>();
     private GameListAdapter gameListAdapter;
     private long playerID;
     private String player;
@@ -41,6 +41,7 @@ public class PlayerStatsActivity extends AppCompatActivity {
         gameListAdapter = new GameListAdapter(this, gameArrayList);
 
         ListView gameListView = (ListView) findViewById(R.id.game_list);
+        assert gameListView != null;
         gameListView.setAdapter(gameListAdapter);
 
         gameListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -80,7 +81,7 @@ public class PlayerStatsActivity extends AppCompatActivity {
         }
     }
 
-    public void addGame(View view) {
+    public void addGame(@SuppressWarnings("UnusedParameters") View view) {
         Intent intent = new Intent(getBaseContext(), AddGameActivity.class);
         intent.putExtra("action", "add");
         intent.putExtra("id", playerID);
